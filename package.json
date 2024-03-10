@@ -1,38 +1,40 @@
 {
-  "name": "dtrans",
-  "version": "0.0.9",
-  "description": "simple web application to store and calculate transections",
-  "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/shishirsabbir/dtrans_app.git"
-  },
-  "keywords": [
-    "digital_transections",
-    "dtrans",
-    "transection_record"
-  ],
-  "author": "shishirsabbir & sifatraihan",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/shishirsabbir/dtrans_app/issues"
-  },
-  "homepage": "https://github.com/shishirsabbir/dtrans_app#readme",
-  "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "dotenv": "^16.4.5",
-    "express": "^4.18.3",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.2.1",
-    "slugify": "^1.6.6",
-    "validator": "^13.11.0"
-  },
-  "devDependencies": {
-    "eslint": "^8.57.0",
-    "nodemon": "^3.1.0"
-  }
+    "name": "dtrans",
+    "version": "0.0.9",
+    "description": "simple web application to store and calculate transections",
+    "main": "server.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "nodemon server.js",
+        "compile-sass": "sass public/sass/main.sass public/css/style.css -w"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/shishirsabbir/dtrans_app.git"
+    },
+    "keywords": [
+        "digital_transections",
+        "dtrans",
+        "transection_record"
+    ],
+    "author": "shishirsabbir & sifatraihan",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/shishirsabbir/dtrans_app/issues"
+    },
+    "homepage": "https://github.com/shishirsabbir/dtrans_app#readme",
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "dotenv": "^16.4.5",
+        "express": "^4.18.3",
+        "jsonwebtoken": "^9.0.2",
+        "mongoose": "^8.2.1",
+        "slugify": "^1.6.6",
+        "validator": "^13.11.0"
+    },
+    "devDependencies": {
+        "eslint": "^8.57.0",
+        "nodemon": "^3.1.0",
+        "sass": "^1.71.1"
+    }
 }
