@@ -1,5 +1,6 @@
 // import
 const jwt = require('jsonwebtoken');
+const { promisify } = require('util');
 const User = require('./../models/userModel');
 
 // token create function
@@ -18,6 +19,9 @@ const signup = async (req, res) => {
             password: req.body.password,
             password_confirm: req.body.password_confirm,
         });
+
+        // disabling password
+        newUser.password = undefined;
 
         res.status(201).json({
             status: 'success',
@@ -54,11 +58,17 @@ const login = async (req, res) => {
         // 3) if everything is ok, send token to client
         const token = signToken(user._id);
 
+        // 4) disable password before sending
+        user.password = undefined;
+
         // 4) sending response with the token
         res.status(200).json({
             status: 'success',
             requestedAt: req.requestTime,
             token,
+            data: {
+                user,
+            },
         });
     } catch (err) {
         if (process.env.NODE_ENV === 'development') {
@@ -73,5 +83,58 @@ const login = async (req, res) => {
     }
 };
 
+const protect = async (req, res, next) => {
+    try {
+        // 1) getting the token and check if it's there
+        let token;
+
+        if (
+            req.headers.authorization &&
+            req.headers.authorization.startsWith('Bearer')
+        ) {
+            token = req.headers.authorization.split(' ')[1];
+        }
+
+        if (!token) {
+            throw new Error('token not found');
+        }
+
+        // 2) verification token
+        const decoded = await promisify(jwt.verify)(
+            token,
+            process.env.JWT_SECRET_KEY
+        );
+
+        // 3) check if user still exists
+        const currentUser = await User.findById(decoded.id);
+        if (!currentUser) {
+            throw new Error('user not found');
+        }
+
+        // 4) check if user changed password after the token was issued
+        if (currentUser.changedPasswordAfter(decoded.iat)) {
+            throw new Error('password changed after jwt creation');
+        }
+
+        // 5) grand access to the protected routes
+        req.user = currentUser;
+        next();
+    } catch (err) {
+        res.status(401).json({
+            status: 'fail',
+            requestedAt: req.requestTime,
+            message: err.message,
+        });
+    }
+};
+
+/*
+const forgotPassword = async (req, res) => {
+    // 1) get user based on posted email
+    // 2) generate a random reset token
+    // 3) send it to user's email
+};
+*/
+
 // exports
-module.exports = { signup, login };
+module.exports = { signup, login, protect };
